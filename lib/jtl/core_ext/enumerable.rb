@@ -17,4 +17,18 @@ module Enumerable
       frequencies_orig(&block)
     end
   end
+
+  def to_gruff_labels
+    labels = {}
+
+    self.each_with_index do |label, i|
+      labels[i] = label
+    end
+
+    if block_given?
+      labels = Hash[*labels.select {|k, v| yield(k, v) }.flatten]
+    end
+
+    Hash[*labels.select {|k, v| [k, v] }.flatten]
+  end
 end

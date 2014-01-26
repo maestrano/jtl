@@ -197,7 +197,6 @@ describe Jtl do
 
   it 'to_gruff_labels' do
     jtl = Jtl.new(jtl_path).flatten
-    p jtl.elapseds.frequencies(10)
+    p jtl.elapseds.frequencies(10).to_gruff_labels
   end
-
 end
