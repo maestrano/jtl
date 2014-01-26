@@ -1,5 +1,4 @@
-require "jtl/version"
+require 'csv'
 
-module Jtl
-  # Your code goes here...
-end
+require 'jtl/version'
+require 'jtl/jtl'

@@ -1,3 +1,3 @@
-module Jtl
+class Jtl
   VERSION = "0.0.1"
 end
