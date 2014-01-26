@@ -14,7 +14,7 @@ class Jtl
   private
 
   def aggregate
-    aggregated = {}
+    aggregated = OrderedHash.new
 
     @jtl.each do |row|
       ts = row[0].to_i
