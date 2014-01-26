@@ -29,6 +29,6 @@ module Enumerable
       labels = Hash[*labels.select {|k, v| yield(k, v) }.flatten]
     end
 
-    Hash[*labels.select {|k, v| [k, v] }.flatten]
+    Hash[*labels.map {|k, v| [k, v.to_s] }.flatten]
   end
 end

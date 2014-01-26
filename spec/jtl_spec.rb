@@ -197,6 +197,12 @@ describe Jtl do
 
   it 'to_gruff_labels' do
     jtl = Jtl.new(jtl_path).flatten
-    p jtl.elapseds.frequencies(10).to_gruff_labels
+    expect(jtl.elapseds.frequencies(10).keys.to_gruff_labels).to eq({0=>"140", 1=>"150", 2=>"160", 3=>"170", 4=>"180", 5=>"190", 6=>"200", 7=>"210", 8=>"220", 9=>"230", 10=>"240", 11=>"250", 12=>"260", 13=>"270", 14=>"280", 15=>"290", 16=>"300", 17=>"310", 18=>"320", 19=>"330", 20=>"340", 21=>"350", 22=>"360", 23=>"370", 24=>"380", 25=>"390", 26=>"400", 27=>"410", 28=>"420", 29=>"430", 30=>"440", 31=>"450"})
   end
+  it 'to_gruff_labels (pass block)' do
+    jtl = Jtl.new(jtl_path).flatten
+    labels = jtl.elapseds.frequencies(10).keys.to_gruff_labels {|k, v| (v % 100).zero? }
+    expect(labels).to eq({6=>"200", 16=>"300", 26=>"400"})
+  end
+
 end
