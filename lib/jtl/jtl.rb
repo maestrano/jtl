@@ -21,7 +21,7 @@ class Jtl
     @interval = interval
   end
 
-  def lebels
+  def labels
     @jtl.inject({}) {|r, i| r[label(i)] = true; r }.keys
   end
 
@@ -31,7 +31,7 @@ class Jtl
 
   def elapseds(&block)
     data_set = aggregate_by(:elapsed) {|v| v.to_i }
-    DataSet.new(data_set, &block)
+    DataSet.create(data_set, &block)
   end
 
   private

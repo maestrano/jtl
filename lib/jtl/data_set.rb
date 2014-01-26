@@ -1,8 +1,8 @@
 class Jtl::DataSet
   include Enumerable
 
-  def self.new(data_set)
-    obj = super
+  def self.create(data_set)
+    obj = self.new(data_set)
 
     if block_given?
       obj.to_a.map {|i| yield(i) }
@@ -18,7 +18,7 @@ class Jtl::DataSet
   def [](label, &block)
     new_data_set = OrderedHash.new
 
-    @deta_set.each do |mark, values|
+    @data_set.each do |mark, values|
       new_data_set[mark] = values.select do |lv|
         if label.kind_of?(Regexp)
           lv.label =~ label
@@ -28,7 +28,7 @@ class Jtl::DataSet
       end
     end
 
-    self.class.new(new_data_set, &block)
+    self.class.create(new_data_set, &block)
   end
 
   def each
@@ -38,7 +38,7 @@ class Jtl::DataSet
   end
 
   def method_missing(name, *args, &block)
-    if args.zero?
+    if args.empty?
       self[name.to_s, &block]
     else
       super
