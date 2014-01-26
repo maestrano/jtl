@@ -1,4 +1,4 @@
-# Jtl
+# jtl
 
 TODO: Write a gem description
 
