@@ -1,4 +1,5 @@
 require 'csv'
+require 'forwardable'
 require 'orderedhash'
 require 'simple_stats'
 require 'jtl/version'

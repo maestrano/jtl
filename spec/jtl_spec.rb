@@ -19,17 +19,26 @@ describe Jtl do
     jtl = Jtl.new(jtl_path)
     marks = jtl_range.map {|i| Time.at((i - i % 1000) / 1000) }.uniq.sort
     expect(jtl.scale_marks).to eq(marks)
+    expect(jtl.elapseds.scale_marks).to eq(marks)
   end
 
   it 'scale_marks (10s)' do
     jtl = Jtl.new(jtl_path, 10000)
     marks = jtl_range.map {|i| Time.at((i - i % 10000) / 1000) }.uniq.sort
     expect(jtl.scale_marks).to eq(marks)
+    expect(jtl.elapseds.scale_marks).to eq(marks)
   end
 
   it 'labels' do
     jtl = Jtl.new(jtl_path)
     expect(jtl.labels.sort).to eq(['not_exists', 'root'])
+    expect(jtl.elapseds.labels.sort).to eq(['not_exists', 'root'])
+    expect(jtl.elapseds.root.labels.sort).to eq(['not_exists', 'root'])
+  end
+
+  it 'time_stamp' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.time_stamps.flatten.all? {|i| jtl_range.include?(i) }).to be_true
   end
 
   it 'response_code' do

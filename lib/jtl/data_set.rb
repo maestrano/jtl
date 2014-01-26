@@ -1,8 +1,11 @@
 class Jtl::DataSet
   include Enumerable
+  extend Forwardable
 
-  def self.create(data_set)
-    obj = self.new(data_set)
+  def_delegators :@jtl, :scale_marks, :labels
+
+  def self.create(data_set, jtl)
+    obj = self.new(data_set, jtl)
 
     if block_given?
       obj.to_a.map {|i| yield(i) }
@@ -11,9 +14,25 @@ class Jtl::DataSet
     end
   end
 
-  def initialize(data_set)
+  def initialize(data_set, jtl)
     @data_set = data_set
+    @jtl = jtl
   end
+
+  def to_hash
+    hash = {}
+
+    @data_set.each do |mark, values|
+      values.each do |lv|
+        hash[lv.label] ||= {}
+        hash[lv.label][mark] ||= []
+        hash[lv.label][mark] << lv.value
+      end
+    end
+
+    return hash
+  end
+  alias inspect to_hash
 
   def [](label, &block)
     new_data_set = OrderedHash.new
@@ -28,7 +47,7 @@ class Jtl::DataSet
       end
     end
 
-    self.class.create(new_data_set, &block)
+    self.class.create(new_data_set, @jtl, &block)
   end
 
   def each

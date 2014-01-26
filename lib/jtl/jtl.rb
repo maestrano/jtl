@@ -29,24 +29,29 @@ class Jtl
     aggregate_rows.keys
   end
 
+  def time_stamps(&block)
+    data_set = aggregate_by(:time_stamp) {|v| v.to_i }
+    DataSet.create(data_set, self, &block)
+  end
+
   def response_codes(&block)
     data_set = aggregate_by(:response_code) {|v| v.to_i }
-    DataSet.create(data_set, &block)
+    DataSet.create(data_set, self, &block)
   end
 
   def thread_names(&block)
     data_set = aggregate_by(:thread_name)
-    DataSet.create(data_set, &block)
+    DataSet.create(data_set, self, &block)
   end
 
   def response_messages(&block)
     data_set = aggregate_by(:response_message)
-    DataSet.create(data_set, &block)
+    DataSet.create(data_set, self, &block)
   end
 
   def elapseds(&block)
     data_set = aggregate_by(:elapsed) {|v| v.to_i }
-    DataSet.create(data_set, &block)
+    DataSet.create(data_set, self, &block)
   end
 
   private
