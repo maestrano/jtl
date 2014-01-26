@@ -1,6 +1,6 @@
 # jtl
 
-Parse the default jtl file of [Apache JMeter](http://jmeter.apache.org/).
+Parse a default jtl file of [Apache JMeter](http://jmeter.apache.org/).
 
 ## Installation
 

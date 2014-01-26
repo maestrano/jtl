@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Jtl::VERSION
   spec.authors       = ['Genki Sugawara']
   spec.email         = ['sgwr_dts@yahoo.co.jp']
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ''
+  spec.description   = %q{Parse a default jtl file of Apache JMeter.}
+  spec.summary       = %q{Parse a default jtl file of Apache JMeter.}
+  spec.homepage      = 'https://bitbucket.org/winebarrel/jtl'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
