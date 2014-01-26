@@ -29,6 +29,11 @@ class Jtl
     aggregate_rows.keys
   end
 
+  def response_codes(&block)
+    data_set = aggregate_by(:response_code) {|v| v.to_i }
+    DataSet.create(data_set, &block)
+  end
+
   def elapseds(&block)
     data_set = aggregate_by(:elapsed) {|v| v.to_i }
     DataSet.create(data_set, &block)

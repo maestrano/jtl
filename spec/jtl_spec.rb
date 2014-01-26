@@ -32,6 +32,13 @@ describe Jtl do
     expect(jtl.labels.sort).to eq(['not_exists', 'root'])
   end
 
+  it 'response_code' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.response_codes.to_a.flatten.uniq.sort).to eq([200, 404])
+    expect(jtl.response_codes.root.to_a.flatten.uniq.sort).to eq([200])
+    expect(jtl.response_codes.not_exists.to_a.flatten.uniq.sort).to eq([404])
+  end
+
   it 'elapsed' do
     jtl = Jtl.new(jtl_path)
     expect(jtl.elapseds.to_a).to eq(jtl_elapseds)
