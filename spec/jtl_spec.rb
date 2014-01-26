@@ -41,6 +41,19 @@ describe Jtl do
     expect(jtl.time_stamps.flatten.all? {|i| jtl_range.include?(i) }).to be_true
   end
 
+
+  it 'elapsed' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.elapseds.to_a).to eq(jtl_elapseds)
+    expect(jtl.elapseds {|i| i.mean.to_i }).to eq(jtl_elapseds.map {|i| i.mean.to_i })
+  end
+
+  it 'elapsed (root)' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.elapseds.root.to_a).to eq(jtl_root_elapseds)
+    expect(jtl.elapseds.root {|i| i.mean.to_i }).to eq(jtl_root_elapseds.map {|i| i.mean.to_i })
+  end
+
   it 'response_code' do
     jtl = Jtl.new(jtl_path)
     expect(jtl.response_codes.flatten.uniq.sort).to eq([200, 404])
@@ -75,17 +88,5 @@ describe Jtl do
     expect(rs.include?(false)).to be_true
     expect(jtl.successes.root.flatten.uniq).to eq([true])
     expect(jtl.successes.not_exists.flatten.uniq).to eq([false])
-  end
-
-  it 'elapsed' do
-    jtl = Jtl.new(jtl_path)
-    expect(jtl.elapseds.to_a).to eq(jtl_elapseds)
-    expect(jtl.elapseds {|i| i.mean.to_i }).to eq(jtl_elapseds.map {|i| i.mean.to_i })
-  end
-
-  it 'elapsed (root)' do
-    jtl = Jtl.new(jtl_path)
-    expect(jtl.elapseds.root.to_a).to eq(jtl_root_elapseds)
-    expect(jtl.elapseds.root {|i| i.mean.to_i }).to eq(jtl_root_elapseds.map {|i| i.mean.to_i })
   end
 end
