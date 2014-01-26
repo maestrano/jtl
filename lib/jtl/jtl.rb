@@ -54,6 +54,11 @@ class Jtl
     DataSet.create(data_set, self, &block)
   end
 
+  def successes(&block)
+    data_set = aggregate_by(:success) {|v| v == 'true' }
+    DataSet.create(data_set, self, &block)
+  end
+
   def elapseds(&block)
     data_set = aggregate_by(:elapsed) {|v| v.to_i }
     DataSet.create(data_set, self, &block)
