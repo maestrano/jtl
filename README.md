@@ -25,8 +25,8 @@ Or install it yourself as:
 require 'jtl'
 require 'gruff'
 
-jtl = Jtl.new('jmeter.jtl', 10_000)
-#                           ~~~~~~~ interval: 10s (default: 1s)
+jtl = Jtl.new('jmeter.jtl', interval: 10_000)
+#                           ~~~~~~~~~~~~~~~~ interval: 10s (default: 1s)
 
 g = Gruff::Line.new
 

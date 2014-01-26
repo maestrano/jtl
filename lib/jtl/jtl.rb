@@ -1,6 +1,4 @@
 class Jtl
-  attr_accessor :interval
-
   COLUMNS = [
     :time_stamp,
     :elapsed,
@@ -14,10 +12,26 @@ class Jtl
     :latency,
   ]
 
-  def initialize(path, interval = 1000)
-    path = path.path if path.kind_of?(File)
+  def self.parse_time_stamp(ts)
+    ts = ts.to_i
+    msec = (ts % 1000)
+    ts = ((ts - msec) / 1000).to_i
+    Time.at(ts, msec * 1000)
+  end
+
+  def initialize(path, options = {})
+    @options = {:interval => 1000, :sort => true}.merge(options)
+    @path = path.kind_of?(File) ? path.path : path
     @jtl = CSV.read(path)
-    @interval = interval
+    @jtl = @jtl.sort_by {|i| i[0] } if @options[:sort]
+  end
+
+  def interval
+    @options[:interval]
+  end
+
+  def flatten
+    self.class.new(@path, @options.merge(:interval => nil))
   end
 
   def labels
@@ -25,7 +39,7 @@ class Jtl
   end
 
   def scale_marks
-    aggregate_rows.keys
+    aggregate_rows.map {|k, v| k }
   end
 
   def time_stamps(&block)
@@ -77,13 +91,19 @@ class Jtl
 
   def aggregate_by(column)
     idx = COLUMNS.index(column)
-    aggregated = OrderedHash.new
+    aggregated = self.interval ? OrderedHash.new : []
 
     aggregate_rows.each do |mark, rows|
-      aggregated[mark] = rows.map do |row|
-        value = row[idx]
+      if self.interval
+        aggregated[mark] = rows.map do |row|
+          value = row[idx]
+          value = yield(value) if block_given?
+          LabeledValue.new(label(row), value)
+        end
+      else
+        value = rows[idx]
         value = yield(value) if block_given?
-        LabeledValue.new(label(row), value)
+        aggregated << [mark, LabeledValue.new(label(rows), value)]
       end
     end
 
@@ -91,25 +111,22 @@ class Jtl
   end
 
   def aggregate_rows
-    aggregated = OrderedHash.new
+    aggregated = self.interval ? OrderedHash.new : []
 
     @jtl.each do |row|
       ts = row[0].to_i
-      ts = ts - (ts % @interval)
-      ts = parse_time_stamp(ts)
+      ts = ts - (ts % self.interval) if self.interval
+      ts = self.class.parse_time_stamp(ts)
 
-      aggregated[ts] ||= []
-      aggregated[ts] << row
+      if self.interval
+        aggregated[ts] ||= []
+        aggregated[ts] << row
+      else
+        aggregated << [ts, row]
+      end
     end
 
     return aggregated
-  end
-
-  def parse_time_stamp(ts)
-    ts = ts.to_i
-    msec = (ts % 1000)
-    ts = ((ts - msec) / 1000).to_i
-    Time.at(ts, msec * 1000)
   end
 
   def label(row)

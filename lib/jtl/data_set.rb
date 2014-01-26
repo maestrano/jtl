@@ -23,10 +23,15 @@ class Jtl::DataSet
     hash = {}
 
     @data_set.each do |mark, values|
-      values.each do |lv|
-        hash[lv.label] ||= {}
-        hash[lv.label][mark] ||= []
-        hash[lv.label][mark] << lv.value
+      if values.kind_of?(Jtl::LabeledValue)
+        hash[values.label] ||= []
+        hash[values.label] << [mark, values.value]
+      else
+        values.each do |lv|
+          hash[lv.label] ||= {}
+          hash[lv.label][mark] ||= []
+          hash[lv.label][mark] << lv.value
+        end
       end
     end
 
@@ -35,14 +40,20 @@ class Jtl::DataSet
   alias inspect to_hash
 
   def [](label, &block)
-    new_data_set = OrderedHash.new
+    new_data_set = @data_set.first[1].kind_of?(Jtl::LabeledValue) ? [] : OrderedHash.new
 
     @data_set.each do |mark, values|
-      new_data_set[mark] = values.select do |lv|
-        if label.kind_of?(Regexp)
-          lv.label =~ label
-        else
-          lv.label == label.to_s
+      if values.kind_of?(Jtl::LabeledValue)
+        if (label.kind_of?(Regexp) and values.label =~ label) or values.label == label.to_s
+          new_data_set << [mark, values]
+        end
+      else
+        new_data_set[mark] = values.select do |lv|
+          if label.kind_of?(Regexp)
+            lv.label =~ label
+          else
+            lv.label == label.to_s
+          end
         end
       end
     end
@@ -52,7 +63,11 @@ class Jtl::DataSet
 
   def each
     @data_set.each do |mark, values|
-      yield(values.map {|lv| lv.value})
+      if values.kind_of?(Jtl::LabeledValue)
+        yield(values.value)
+      else
+        yield(values.map {|lv| lv.value})
+      end
     end
   end
 
