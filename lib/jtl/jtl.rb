@@ -29,6 +29,11 @@ class Jtl
     aggregate_rows.keys
   end
 
+  def elapseds(&block)
+    data_set = aggregate_by(:elapsed) {|v| v.to_i }
+    DataSet.create(data_set, self, &block)
+  end
+
   def time_stamps(&block)
     data_set = aggregate_by(:time_stamp) {|v| v.to_i }
     DataSet.create(data_set, self, &block)
@@ -56,11 +61,6 @@ class Jtl
 
   def successes(&block)
     data_set = aggregate_by(:success) {|v| v == 'true' }
-    DataSet.create(data_set, self, &block)
-  end
-
-  def elapseds(&block)
-    data_set = aggregate_by(:elapsed) {|v| v.to_i }
     DataSet.create(data_set, self, &block)
   end
 
