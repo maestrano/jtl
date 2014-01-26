@@ -11,7 +11,6 @@ class Jtl
     :data_type,
     :success,
     :bytes,
-    :url,
     :latency,
   ]
 
@@ -66,6 +65,11 @@ class Jtl
 
   def bytes(&block)
     data_set = aggregate_by(:bytes) {|v| v.to_i }
+    DataSet.create(data_set, self, &block)
+  end
+
+  def latencies(&block)
+    data_set = aggregate_by(:latency) {|v| v.to_i }
     DataSet.create(data_set, self, &block)
   end
 
