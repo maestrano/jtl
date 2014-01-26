@@ -1,4 +1,7 @@
 require 'csv'
 require 'orderedhash'
+require 'simple_stats'
 require 'jtl/version'
 require 'jtl/jtl'
+require 'jtl/data_set'
+require 'jtl/labeled_value'
