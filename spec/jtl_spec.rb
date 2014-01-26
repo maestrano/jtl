@@ -39,6 +39,13 @@ describe Jtl do
     expect(jtl.response_codes.not_exists.to_a.flatten.uniq.sort).to eq([404])
   end
 
+  it 'response_message' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.response_messages.to_a.flatten.uniq.sort).to eq(['Not Found', 'OK'])
+    expect(jtl.response_messages.root.to_a.flatten.uniq.sort).to eq(['OK'])
+    expect(jtl.response_messages.not_exists.to_a.flatten.uniq.sort).to eq(['Not Found'])
+  end
+
   it 'elapsed' do
     jtl = Jtl.new(jtl_path)
     expect(jtl.elapseds.to_a).to eq(jtl_elapseds)
