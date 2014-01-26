@@ -34,6 +34,11 @@ class Jtl
     DataSet.create(data_set, &block)
   end
 
+  def thread_names(&block)
+    data_set = aggregate_by(:thread_name)
+    DataSet.create(data_set, &block)
+  end
+
   def response_messages(&block)
     data_set = aggregate_by(:response_message)
     DataSet.create(data_set, &block)

@@ -34,16 +34,21 @@ describe Jtl do
 
   it 'response_code' do
     jtl = Jtl.new(jtl_path)
-    expect(jtl.response_codes.to_a.flatten.uniq.sort).to eq([200, 404])
-    expect(jtl.response_codes.root.to_a.flatten.uniq.sort).to eq([200])
-    expect(jtl.response_codes.not_exists.to_a.flatten.uniq.sort).to eq([404])
+    expect(jtl.response_codes.flatten.uniq.sort).to eq([200, 404])
+    expect(jtl.response_codes.root.flatten.uniq.sort).to eq([200])
+    expect(jtl.response_codes.not_exists.flatten.uniq.sort).to eq([404])
   end
 
   it 'response_message' do
     jtl = Jtl.new(jtl_path)
-    expect(jtl.response_messages.to_a.flatten.uniq.sort).to eq(['Not Found', 'OK'])
-    expect(jtl.response_messages.root.to_a.flatten.uniq.sort).to eq(['OK'])
-    expect(jtl.response_messages.not_exists.to_a.flatten.uniq.sort).to eq(['Not Found'])
+    expect(jtl.response_messages.flatten.uniq.sort).to eq(['Not Found', 'OK'])
+    expect(jtl.response_messages.root.flatten.uniq.sort).to eq(['OK'])
+    expect(jtl.response_messages.not_exists.flatten.uniq.sort).to eq(['Not Found'])
+  end
+
+  it 'thread_name' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.thread_names.flatten.all? {|i| i =~ /ThreadGroup/ }).to be_true
   end
 
   it 'elapsed' do

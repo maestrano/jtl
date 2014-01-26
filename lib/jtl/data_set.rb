@@ -38,7 +38,9 @@ class Jtl::DataSet
   end
 
   def method_missing(name, *args, &block)
-    if args.empty?
+    if (ary = self.to_a).respond_to?(name)
+      ary.send(name, *args, &block)
+    elsif args.empty?
       self[name.to_s, &block]
     else
       super
