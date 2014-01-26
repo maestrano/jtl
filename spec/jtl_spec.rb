@@ -62,6 +62,11 @@ describe Jtl do
     expect(jtl.data_types.not_exists.flatten.uniq.sort).to eq(['text'])
   end
 
+  it 'thread_name' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.thread_names.flatten.all? {|i| i =~ /ThreadGroup/ }).to be_true
+  end
+
   it 'success' do
     jtl = Jtl.new(jtl_path)
     rs = jtl.successes.flatten.uniq
@@ -70,11 +75,6 @@ describe Jtl do
     expect(rs.include?(false)).to be_true
     expect(jtl.successes.root.flatten.uniq).to eq([true])
     expect(jtl.successes.not_exists.flatten.uniq).to eq([false])
-  end
-
-  it 'thread_name' do
-    jtl = Jtl.new(jtl_path)
-    expect(jtl.thread_names.flatten.all? {|i| i =~ /ThreadGroup/ }).to be_true
   end
 
   it 'elapsed' do
