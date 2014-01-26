@@ -64,6 +64,11 @@ class Jtl
     DataSet.create(data_set, self, &block)
   end
 
+  def bytes(&block)
+    data_set = aggregate_by(:bytes) {|v| v.to_i }
+    DataSet.create(data_set, self, &block)
+  end
+
   private
 
   def aggregate_by(column)

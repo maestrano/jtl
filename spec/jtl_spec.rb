@@ -89,4 +89,11 @@ describe Jtl do
     expect(jtl.successes.root.flatten.uniq).to eq([true])
     expect(jtl.successes.not_exists.flatten.uniq).to eq([false])
   end
+
+  it 'bytes' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.bytes.flatten.uniq.sort).to eq([1615, 1622, 1626])
+    expect(jtl.bytes.root.flatten.uniq.sort).to eq([1615])
+    expect(jtl.bytes.not_exists.flatten.uniq.sort).to eq([1622, 1626])
+  end
 end
