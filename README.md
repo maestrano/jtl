@@ -2,6 +2,9 @@
 
 Parse a default jtl file of [Apache JMeter](http://jmeter.apache.org/).
 
+[![Gem Version](https://badge.fury.io/rb/jtl.png)](http://badge.fury.io/rb/jtl)
+[![Build Status](https://drone.io/bitbucket.org/winebarrel/jtl/status.png)](https://drone.io/bitbucket.org/winebarrel/jtl/latest)
+
 ## Installation
 
 Add this line to your application's Gemfile:
