@@ -1,6 +1,6 @@
 # jtl
 
-TODO: Write a gem description
+Parse the default jtl file of [Apache JMeter](http://jmeter.apache.org/).
 
 ## Installation
 
@@ -18,12 +18,22 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'jtl'
+require 'gruff'
 
-## Contributing
+jtl = Jtl.new('jmeter.jtl', 10_000)
+#                           ~~~~~~~ interval: 10s (default: 1s)
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+g = Gruff::Line.new
+
+g.title = 'elapsed (avg)'
+marks = jtl.scale_marks.map {|i| i.strftime('%M:%S') }
+g.labels = Hash[*(0...marks.length).zip(marks).flatten]
+
+g.data :all,  jtl.elapseds {|i| i.mean }
+g.data :my_label1, jtl.elapseds.my_label1 {|i| i.mean }
+g.data :my_label2, jtl.elapseds.my_label2 {|i| i.mean }
+
+g.write('elapsed.png')
+```
