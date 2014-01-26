@@ -55,6 +55,13 @@ describe Jtl do
     expect(jtl.response_messages.not_exists.flatten.uniq.sort).to eq(['Not Found'])
   end
 
+  it 'data_type' do
+    jtl = Jtl.new(jtl_path)
+    expect(jtl.data_types.flatten.uniq.sort).to eq(['text'])
+    expect(jtl.data_types.root.flatten.uniq.sort).to eq(['text'])
+    expect(jtl.data_types.not_exists.flatten.uniq.sort).to eq(['text'])
+  end
+
   it 'thread_name' do
     jtl = Jtl.new(jtl_path)
     expect(jtl.thread_names.flatten.all? {|i| i =~ /ThreadGroup/ }).to be_true

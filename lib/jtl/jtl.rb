@@ -49,6 +49,11 @@ class Jtl
     DataSet.create(data_set, self, &block)
   end
 
+  def data_types(&block)
+    data_set = aggregate_by(:data_type)
+    DataSet.create(data_set, self, &block)
+  end
+
   def elapseds(&block)
     data_set = aggregate_by(:elapsed) {|v| v.to_i }
     DataSet.create(data_set, self, &block)
