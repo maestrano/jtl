@@ -1,4 +1,6 @@
 class Jtl
+  attr_reader :path
+
   COLUMNS = [
     :time_stamp,
     :elapsed,
@@ -24,6 +26,14 @@ class Jtl
     @path = path.kind_of?(File) ? path.path : path
     @jtl = CSV.read(path)
     @jtl = @jtl.sort_by {|i| i[0] } if @options[:sort]
+  end
+
+  def write(output_path)
+    CSV.open(output_path, 'wb') do |csv|
+      @jtl.each do |row|
+        csv << row
+      end
+    end
   end
 
   def interval
