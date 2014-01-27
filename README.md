@@ -28,14 +28,24 @@ require 'gruff'
 jtl = Jtl.new('jmeter.jtl', interval: 10_000)
 #                           ~~~~~~~~~~~~~~~~ interval: 10s (default: 1s)
 
-g = Gruff::Line.new
+g_line = Gruff::Line.new
 
-g.title = 'elapsed (avg)'
-g.labels = jtl.scale_marks.map {|i| i.strftime('%M:%S') }.to_gruff_labels
+g_line.title = 'elapsed (avg)'
+g_line.labels = jtl.scale_marks.map {|i| i.strftime('%M:%S') }.to_gruff_labels
 
-g.data :all, jtl.elapseds {|i| i.mean }
-g.data :my_label1, jtl.elapseds.my_label1 {|i| i.mean }
-g.data :my_label2, jtl.elapseds.my_label2 {|i| i.mean }
+g_line.data :all, jtl.elapseds {|i| i.mean }
+g_line.data :my_label1, jtl.elapseds.my_label1 {|i| i.mean }
+g_line.data :my_label2, jtl.elapseds.my_label2 {|i| i.mean }
 
-g.write('elapsed.png')
+g_line.write('elapsed.png')
+
+jtl = jtl.flatten
+fs = jtl.elapseds.frequencies(10)
+
+g_bar = Gruff::Bar.new
+g_bar.title = 'histogram'
+g_bar.labels = fs.keys.to_gruff_labels {|k, v| (v % 100).zero? }
+g_bar.data :elapsed, fs.values
+
+g.write('histogram.png')
 ```
