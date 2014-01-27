@@ -31,8 +31,7 @@ jtl = Jtl.new('jmeter.jtl', interval: 10_000)
 g = Gruff::Line.new
 
 g.title = 'elapsed (avg)'
-marks = jtl.scale_marks.map {|i| i.strftime('%M:%S') }
-g.labels = Hash[*(0...marks.length).zip(marks).flatten]
+g.labels = jtl.scale_marks.map {|i| i.strftime('%M:%S') }.to_gruff_labels
 
 g.data :all,  jtl.elapseds {|i| i.mean }
 g.data :my_label1, jtl.elapseds.my_label1 {|i| i.mean }
