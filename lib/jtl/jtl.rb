@@ -42,6 +42,11 @@ class Jtl
     @options[:interval]
   end
 
+  def interval=(v)
+    @options[:interval] = v
+    @aggregated_rows = nil
+  end
+
   def flatten
     self.class.new(@jtl, @options.merge(:interval => nil))
   end
