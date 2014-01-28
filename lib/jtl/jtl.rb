@@ -1,6 +1,4 @@
 class Jtl
-  attr_reader :path
-
   COLUMNS = [
     :time_stamp,
     :elapsed,
@@ -21,11 +19,15 @@ class Jtl
     Time.at(ts, msec * 1000)
   end
 
-  def initialize(path, options = {})
-    @options = {:interval => 1000, :sort => true}.merge(options)
-    @path = path.kind_of?(File) ? path.path : path
-    @jtl = CSV.read(path)
-    @jtl = @jtl.sort_by {|i| i[0] } if @options[:sort]
+  def initialize(path_or_file_or_ary, options = {})
+    @options = {:interval => 1000}.merge(options)
+
+    if path_or_file_or_ary.kind_of?(Array)
+      @jtl = path_or_file_or_ary
+    else
+      path_or_file_or_ary = path_or_file_or_ary.path if path_or_file_or_ary.kind_of?(File)
+      @jtl = CSV.read(path_or_file_or_ary)
+    end
   end
 
   def write(output_path)
@@ -41,7 +43,7 @@ class Jtl
   end
 
   def flatten
-    self.class.new(@path, @options.merge(:interval => nil))
+    self.class.new(@jtl, @options.merge(:interval => nil))
   end
 
   def labels
@@ -121,7 +123,9 @@ class Jtl
   end
 
   def aggregate_rows
-    aggregated = self.interval ? OrderedHash.new : []
+    return @aggregated_rows if @aggregated_rows
+
+    aggregated = self.interval ? {} : []
 
     @jtl.each do |row|
       ts = row[0].to_i
@@ -135,6 +139,20 @@ class Jtl
         aggregated << [ts, row]
       end
     end
+
+    if aggregated.kind_of?(Array)
+      aggregated = aggregated.sort_by {|k, v| k }
+    else
+      new_aggregated = OrderedHash.new
+
+      aggregated.sort_by {|k, v| k }.each do |ts, row|
+        new_aggregated[ts] = row
+      end
+
+      aggregated = new_aggregated
+    end
+
+    @aggregated_rows = aggregated
 
     return aggregated
   end
