@@ -7,8 +7,8 @@ class Jtl
     :thread_name,
     :success,
     :bytes,
-    :stuff1,
-    :stuff2,
+    :label1,
+    :label2,
     :latency,
   ]
 
