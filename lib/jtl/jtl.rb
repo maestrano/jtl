@@ -4,11 +4,11 @@ class Jtl
     :elapsed,
     :label,
     :response_code,
-    :response_message,
     :thread_name,
-    :data_type,
     :success,
     :bytes,
+    :stuff1,
+    :stuff2,
     :latency,
   ]
 
@@ -26,7 +26,7 @@ class Jtl
       @jtl = path_or_file_or_ary
     else
       path_or_file_or_ary = path_or_file_or_ary.path if path_or_file_or_ary.kind_of?(File)
-      @jtl = CSV.read(path_or_file_or_ary)
+      @jtl = CSV.read(path_or_file_or_ary, col_sep: '|')
     end
   end
 

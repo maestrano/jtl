@@ -2,9 +2,6 @@
 
 Parse a default jtl file of [Apache JMeter](http://jmeter.apache.org/).
 
-[![Gem Version](https://badge.fury.io/rb/jtl.png)](http://badge.fury.io/rb/jtl)
-[![Build Status](https://drone.io/bitbucket.org/winebarrel/jtl/status.png)](https://drone.io/bitbucket.org/winebarrel/jtl/latest)
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -26,7 +23,6 @@ require 'jtl'
 require 'gruff'
 
 jtl = Jtl.new('jmeter.jtl', interval: 10_000)
-#                           ~~~~~~~~~~~~~~~~ interval: 10s (default: 1s)
 
 g_line = Gruff::Line.new
 
@@ -47,5 +43,5 @@ g_bar.title = 'histogram'
 g_bar.labels = fs.keys.to_gruff_labels {|k, v| (v % 100).zero? }
 g_bar.data :elapsed, fs.values
 
-g.write('histogram.png')
+g_line.write('histogram.png')
 ```
